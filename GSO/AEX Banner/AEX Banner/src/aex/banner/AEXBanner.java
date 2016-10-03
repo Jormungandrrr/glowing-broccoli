@@ -40,6 +40,11 @@ public class AEXBanner extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
+    
+    @Override
+     public void stop() {
+         
+     }
 
     /**
      * @param args the command line arguments
