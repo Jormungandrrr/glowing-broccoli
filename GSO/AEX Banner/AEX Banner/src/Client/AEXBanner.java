@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aex.banner;
+package Client;
 
 
+import Shared.IEffectenbeurs;
+import java.rmi.RemoteException;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -31,12 +33,12 @@ public class AEXBanner extends Application {
     private double textPosition;
     private BannerController controller;
     private AnimationTimer animationTimer;
-
+    public static IEffectenbeurs eb;
     
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws RemoteException {
 
-        controller = new BannerController(this);
+        controller = new BannerController(this,eb);
 
         Font font = new Font("Arial", HEIGHT);
         text = new Text();
@@ -59,12 +61,9 @@ public class AEXBanner extends Application {
 
             @Override
             public void handle(long now) {
-                textPosition -= 5;
+                textPosition -= 2;
                 long lag = now - prevUpdate;
                 if (lag >= NANO_TICKS) {
-                    // calculate new location of text
-                    // TODO
-                    
                         text.relocate(textPosition,0);
 			prevUpdate = now;
                 }
@@ -91,7 +90,7 @@ public class AEXBanner extends Application {
     }
 
     @Override
-    public void stop() {
+    public void stop() throws RemoteException {
         animationTimer.stop();
         controller.stop();
     }
@@ -100,8 +99,8 @@ public class AEXBanner extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        launch(args);
+    public static void main() {
+        launch();
     }
     
 }

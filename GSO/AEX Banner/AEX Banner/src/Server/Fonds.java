@@ -3,13 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package aex.banner;
+package Server;
+
+import java.io.Serializable;
 
 /**
  *
  * @author Marc
  */
-public class Fonds implements IFonds{
+public class Fonds implements Serializable{
 
     private String Naam;
     private double Koers;
@@ -19,12 +21,10 @@ public class Fonds implements IFonds{
         this.Koers = koers;
     }
 
-    @Override
     public String getNaam() {
       return this.Naam;
     }
 
-    @Override
     public double getKoers() {
        return this.Koers;
     }
