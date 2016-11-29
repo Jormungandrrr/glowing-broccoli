@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package generatekoch;
+package calculate;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,13 +26,13 @@ public class GenerateKoch{
     public static void main(String[] args) {
         KochFractal koch = new KochFractal();
         //koch.setLevel(Integer.parseInt(args[0]));
-        koch.setLevel(1);
+        koch.setLevel(5);
         koch.generateBottomEdge();
         koch.generateLeftEdge();
         koch.generateRightEdge();
         
             try {
-                FileOutputStream fileOut = new FileOutputStream("edges.ser");
+                FileOutputStream fileOut = new FileOutputStream("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12\\edges.ser");
                 ObjectOutputStream out = new ObjectOutputStream(fileOut);
                 out.writeObject(EdgeList);
                 out.close();

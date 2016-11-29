@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package generatekoch;
+package calculate;
 
 import javafx.scene.paint.Color;
 

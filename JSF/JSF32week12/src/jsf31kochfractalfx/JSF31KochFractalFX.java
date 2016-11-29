@@ -6,6 +6,9 @@ package jsf31kochfractalfx;
 
 import calculate.KochManager;
 import calculate.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -165,7 +168,22 @@ public class JSF31KochFractalFX extends Application {
                 fitFractalButtonActionPerformed(event);
             }
         });
-        grid.add(buttonFitFractal, 4, 7);
+        grid.add(buttonFitFractal, 5, 6);
+        
+         // Button to load level
+        Button buttonLoadLevel = new Button();
+        buttonLoadLevel.setText("Load Level");
+        buttonLoadLevel.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    loadLevelButtonActionPerformed(event);
+            }
+
+            private void loadLevelButtonActionPerformed(ActionEvent event) {
+               kochManager.LoadLevel();
+            }
+        });
+        grid.add(buttonLoadLevel, 5, 5);
         
         // Add mouse clicked event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_CLICKED,
@@ -175,6 +193,8 @@ public class JSF31KochFractalFX extends Application {
                     kochPanelMouseClicked(event);
                 }
             });
+        
+        
         
         // Add mouse pressed event to Koch panel
         kochPanel.addEventHandler(MouseEvent.MOUSE_PRESSED,

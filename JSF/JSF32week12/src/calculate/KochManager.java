@@ -5,12 +5,18 @@
  */
 package calculate;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -74,6 +80,24 @@ public class KochManager implements Observer{
         application.requestDrawEdges();
         if (threadcount == 3) {
             ts1.setEnd();
+        }
+    }
+    
+    public synchronized void LoadLevel(){
+        EdgeList.clear();
+        try {
+            FileInputStream fileIn = new FileInputStream("edges.ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            EdgeList =(ArrayList<Edge>)in.readObject();
+            in.close();
+            fileIn.close();
+            
+            ReqDraw();
+            
+            
+            } 
+        catch (Exception ex) {
+            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
