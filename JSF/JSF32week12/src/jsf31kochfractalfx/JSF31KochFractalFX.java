@@ -6,9 +6,6 @@ package jsf31kochfractalfx;
 
 import calculate.KochManager;
 import calculate.*;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;

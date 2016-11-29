@@ -5,10 +5,14 @@
  */
 package calculate;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -87,14 +91,12 @@ public class KochManager implements Observer{
         EdgeList.clear();
         try {
             FileInputStream fileIn = new FileInputStream("edges.ser");
-            ObjectInputStream in = new ObjectInputStream(fileIn);
+            InputStream buffer = new BufferedInputStream(fileIn);
+            ObjectInputStream in = new ObjectInputStream(buffer);
             EdgeList =(ArrayList<Edge>)in.readObject();
             in.close();
             fileIn.close();
-            
-            ReqDraw();
-            
-            
+            application.requestDrawEdges();
             } 
         catch (Exception ex) {
             Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
