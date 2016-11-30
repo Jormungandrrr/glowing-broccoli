@@ -22,6 +22,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import timeutil.TimeStamp;
 
 /**
  *
@@ -177,7 +178,12 @@ public class JSF31KochFractalFX extends Application {
             }
 
             private void loadLevelButtonActionPerformed(ActionEvent event) {
+               TimeStamp ts1 = new TimeStamp();
+               ts1.setBegin();
                kochManager.LoadLevel();
+               //kochManager.BinaryLoadLevel();
+               ts1.setEnd();
+                System.out.println(ts1.toString());
             }
         });
         grid.add(buttonLoadLevel, 5, 5);

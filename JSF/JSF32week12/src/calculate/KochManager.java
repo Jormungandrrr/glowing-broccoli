@@ -6,13 +6,14 @@
 package calculate;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -96,6 +97,24 @@ public class KochManager implements Observer{
             EdgeList =(ArrayList<Edge>)in.readObject();
             in.close();
             fileIn.close();
+            application.requestDrawEdges();
+            } 
+        catch (Exception ex) {
+            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+     public synchronized void BinaryLoadLevel(){
+        EdgeList.clear();
+        try {
+            Path filepath = Paths.get("edges.txt");
+            byte[] data = Files.readAllBytes(filepath);
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            InputStream buffer = new BufferedInputStream(bis);
+            ObjectInput in = new ObjectInputStream(buffer);
+            EdgeList =(ArrayList<Edge>)in.readObject();
+            in.close();
+            bis.close();
             application.requestDrawEdges();
             } 
         catch (Exception ex) {
