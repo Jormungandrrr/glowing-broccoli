@@ -91,7 +91,23 @@ public class KochManager implements Observer{
     public synchronized void LoadLevel(){
         EdgeList.clear();
         try {
-            FileInputStream fileIn = new FileInputStream("edges.ser");
+            FileInputStream fileIn = new FileInputStream("textedges.txt");
+            InputStream buffer = new BufferedInputStream(fileIn);
+            ObjectInputStream in = new ObjectInputStream(buffer);
+            EdgeList =(ArrayList<Edge>)in.readObject();
+            in.close();
+            fileIn.close();
+            application.requestDrawEdges();
+            } 
+        catch (Exception ex) {
+            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public synchronized void LoadBufferLevel(){
+        EdgeList.clear();
+        try {
+            FileInputStream fileIn = new FileInputStream("textedges.txt");
             InputStream buffer = new BufferedInputStream(fileIn);
             ObjectInputStream in = new ObjectInputStream(buffer);
             EdgeList =(ArrayList<Edge>)in.readObject();
@@ -107,7 +123,24 @@ public class KochManager implements Observer{
      public synchronized void BinaryLoadLevel(){
         EdgeList.clear();
         try {
-            Path filepath = Paths.get("edges.txt");
+            Path filepath = Paths.get("binaryedges.ser");
+            byte[] data = Files.readAllBytes(filepath);
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            ObjectInput in = new ObjectInputStream(bis);
+            EdgeList =(ArrayList<Edge>)in.readObject();
+            in.close();
+            bis.close();
+            application.requestDrawEdges();
+            } 
+        catch (Exception ex) {
+            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+     
+     public synchronized void BinaryBufferLoadLevel(){
+        EdgeList.clear();
+        try {
+            Path filepath = Paths.get("binaryedges.ser");
             byte[] data = Files.readAllBytes(filepath);
             ByteArrayInputStream bis = new ByteArrayInputStream(data);
             InputStream buffer = new BufferedInputStream(bis);
@@ -175,6 +208,13 @@ public class KochManager implements Observer{
         application.getProgressBarB().setProgress(0);
         application.getProgressBarB().progressProperty().bind(tb.progressProperty());
         application.getLblCalcBottom().textProperty().bind(tb.messageProperty());
+    }
+    
+    public void closeFractal(){
+           tl.cancel();
+           tr.cancel();
+           tb.cancel();
+           koch.cancel();
     }
     
 }

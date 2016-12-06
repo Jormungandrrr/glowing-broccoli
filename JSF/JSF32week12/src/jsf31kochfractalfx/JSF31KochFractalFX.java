@@ -22,6 +22,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import timeutil.TimeStamp;
 
 /**
@@ -180,8 +181,8 @@ public class JSF31KochFractalFX extends Application {
             private void loadLevelButtonActionPerformed(ActionEvent event) {
                TimeStamp ts1 = new TimeStamp();
                ts1.setBegin();
-               kochManager.LoadLevel();
-               //kochManager.BinaryLoadLevel();
+               //kochManager.LoadLevel();
+               kochManager.BinaryBufferLoadLevel();
                ts1.setEnd();
                 System.out.println(ts1.toString());
             }
@@ -215,6 +216,14 @@ public class JSF31KochFractalFX extends Application {
                 kochPanelMouseDragged(event);
             }
         });
+        
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+        public void handle(WindowEvent we) {
+          System.out.println("Stage is closing");
+          kochManager.closeFractal();
+          System.exit(0);
+      }
+  }); 
         
         // Create Koch manager and set initial level
         resetZoom();
@@ -391,6 +400,7 @@ public class JSF31KochFractalFX extends Application {
                 e.Y2 * zoom + zoomTranslateY,
                 e.color);
     }
+    
 
     /**
      * The main() method is ignored in correctly deployed JavaFX application.
