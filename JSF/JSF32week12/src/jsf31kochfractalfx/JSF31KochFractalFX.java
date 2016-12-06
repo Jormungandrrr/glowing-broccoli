@@ -179,12 +179,31 @@ public class JSF31KochFractalFX extends Application {
             }
 
             private void loadLevelButtonActionPerformed(ActionEvent event) {
-               TimeStamp ts1 = new TimeStamp();
-               ts1.setBegin();
-               //kochManager.LoadLevel();
+               TimeStamp LoadText = new TimeStamp();
+               TimeStamp LoadBufferText = new TimeStamp();
+               TimeStamp LoadBinary = new TimeStamp();
+               TimeStamp LoadBufferBinary = new TimeStamp();
+               
+               LoadText.setBegin();
+               kochManager.LoadLevel();
+               LoadText.setEnd();
+               
+               LoadBufferText.setBegin();
+               kochManager.LoadBufferLevel();
+               LoadBufferText.setEnd();
+               
+               LoadBinary.setBegin();
+               kochManager.BinaryLoadLevel();
+               LoadBinary.setEnd();
+               
+               LoadBufferBinary.setBegin();
                kochManager.BinaryBufferLoadLevel();
-               ts1.setEnd();
-                System.out.println(ts1.toString());
+               LoadBufferBinary.setEnd();
+               
+               System.out.println("LoadText: " + LoadText.toString());
+               System.out.println("LoadBufferText: " +LoadBufferText.toString());
+               System.out.println("LoadBinary: " +LoadBinary.toString());
+               System.out.println("LoadBufferBinary: " +LoadBufferBinary.toString());
             }
         });
         grid.add(buttonLoadLevel, 5, 5);

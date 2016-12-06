@@ -7,6 +7,7 @@ package calculate;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInput;
@@ -18,11 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.concurrent.Task;
+import javafx.scene.paint.Color;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
 /**
@@ -91,12 +94,16 @@ public class KochManager implements Observer{
     public synchronized void LoadLevel(){
         EdgeList.clear();
         try {
-            FileInputStream fileIn = new FileInputStream("textedges.txt");
-            InputStream buffer = new BufferedInputStream(fileIn);
-            ObjectInputStream in = new ObjectInputStream(buffer);
-            EdgeList =(ArrayList<Edge>)in.readObject();
-            in.close();
-            fileIn.close();
+            File inFile = new File("textedges.txt");                                 
+            Scanner scanner = new Scanner(inFile);     
+            String inputSentence = scanner.nextLine();
+            String[] content = inputSentence.split(";");   
+            
+            
+            for (int i = 0;i < content.length;i+=5) {
+            EdgeList.add(new Edge(Double.parseDouble(content[i]),Double.parseDouble(content[i+1]),Double.parseDouble(content[i+2]),Double.parseDouble(content[i+3]),Color.RED));
+            }
+            scanner.close();
             application.requestDrawEdges();
             } 
         catch (Exception ex) {
@@ -106,13 +113,19 @@ public class KochManager implements Observer{
     
     public synchronized void LoadBufferLevel(){
         EdgeList.clear();
-        try {
-            FileInputStream fileIn = new FileInputStream("textedges.txt");
-            InputStream buffer = new BufferedInputStream(fileIn);
-            ObjectInputStream in = new ObjectInputStream(buffer);
-            EdgeList =(ArrayList<Edge>)in.readObject();
-            in.close();
-            fileIn.close();
+         try {
+            File inFile = new File("textedges.txt"); 
+            StringBuffer sb = new StringBuffer();
+            Scanner scanner = new Scanner(inFile);  
+            sb.append(scanner.next());
+            String inputSentence = sb.toString();
+            String[] content = inputSentence.split(";");   
+            
+            
+            for (int i = 0;i < content.length;i+=5) {
+            EdgeList.add(new Edge(Double.parseDouble(content[i]),Double.parseDouble(content[i+1]),Double.parseDouble(content[i+2]),Double.parseDouble(content[i+3]),Color.RED));
+            }
+            scanner.close();
             application.requestDrawEdges();
             } 
         catch (Exception ex) {
