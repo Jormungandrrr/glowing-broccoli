@@ -185,20 +185,22 @@ public class JSF31KochFractalFX extends Application {
                TimeStamp LoadBufferBinary = new TimeStamp();
                
                LoadText.setBegin();
-               kochManager.LoadLevel();
+             //  kochManager.LoadLevel();
                LoadText.setEnd();
                
                LoadBufferText.setBegin();
-               kochManager.LoadBufferLevel();
+             //  kochManager.LoadBufferLevel();
                LoadBufferText.setEnd();
                
                LoadBinary.setBegin();
-               kochManager.BinaryLoadLevel();
+              // kochManager.BinaryLoadLevel();
                LoadBinary.setEnd();
                
                LoadBufferBinary.setBegin();
-               kochManager.BinaryBufferLoadLevel();
+              // kochManager.BinaryBufferLoadLevel();
                LoadBufferBinary.setEnd();
+               
+               kochManager.readMapped();
                
                System.out.println("LoadText: " + LoadText.toString());
                System.out.println("LoadBufferText: " +LoadBufferText.toString());

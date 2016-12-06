@@ -8,10 +8,12 @@ package calculate;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -167,6 +169,31 @@ public class KochManager implements Observer{
             Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     
+     public void readMapped() { 
+        try {
+          RandomAccessFile memoryMappedFile = new RandomAccessFile("mapped", "rw");
+          MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 80000);
+          byte[] bytes = new byte[out.remaining()];
+          out.get(bytes);
+ 
+            try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInputStream ois = new ObjectInputStream(bis);
+            EdgeList =(ArrayList<Edge>)ois.readObject();
+            bis.close();
+            ois.close();
+            application.requestDrawEdges();
+            } catch (Exception e) {
+            System.out.println(e);
+            }
+          
+
+
+        } catch (Exception ex) {
+            Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
 
 
     public synchronized void changeLevel(int nxt) {

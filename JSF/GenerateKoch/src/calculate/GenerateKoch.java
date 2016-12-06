@@ -7,11 +7,16 @@ package calculate;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 import timeutil.TimeStamp;
@@ -32,13 +37,14 @@ public class GenerateKoch{
     public static TimeStamp bufferedfileoutput;
     public static TimeStamp binaryoutput;
     public static TimeStamp bufferedbinaryoutput;
+    public static TimeStamp mapped;
     
     public static void main(String[] args) {
         KochFractal koch = new KochFractal();
         if (args.length == 1) {
             koch.setLevel(Integer.parseInt(args[0]));
         }
-        else{koch.setLevel(10);}
+        else{koch.setLevel(5);}
         koch.generateBottomEdge();
         koch.generateLeftEdge();
         koch.generateRightEdge();
@@ -47,6 +53,7 @@ public class GenerateKoch{
         bufferedfileoutput = new TimeStamp();
         binaryoutput = new TimeStamp();
         bufferedbinaryoutput = new TimeStamp();
+        mapped = new TimeStamp();
         
         fileoutput.setBegin();
         FileOutput();
@@ -64,11 +71,16 @@ public class GenerateKoch{
         BinaryBufferOutput();
         bufferedbinaryoutput.setEnd();
         
+        mapped.setBegin();
+        writeMapped();
+        mapped.setEnd();
+        
         
         System.out.println("Fileoutput: " +fileoutput.toString());
         System.out.println("bufferedFileoutput: " +bufferedfileoutput.toString());
         System.out.println("binaryoutput: " +binaryoutput.toString());
         System.out.println("bufferedbinaryoutput: " +bufferedbinaryoutput.toString());
+        System.out.println("mapped: " +mapped.toString());
     }
     
     public static void FileOutput(){
@@ -152,4 +164,24 @@ public class GenerateKoch{
         i.printStackTrace();
         }
     }
+    
+     public static void writeMapped(){
+        try
+        {
+           RandomAccessFile memoryMappedFile = new RandomAccessFile(uri + "mapped", "rw");
+           MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 80000);
+           
+           ByteArrayOutputStream baos = new ByteArrayOutputStream();
+           ObjectOutputStream oos = new ObjectOutputStream(baos);
+           oos.writeObject(EdgeList);
+           oos.flush();
+           out.put(baos.toByteArray());
+           oos.close();
+           baos.flush();
+           baos.close();
+
+        } catch (Exception ex)
+        {
+        } 
+     }
 }
