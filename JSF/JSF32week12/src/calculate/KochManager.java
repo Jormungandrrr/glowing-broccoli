@@ -130,12 +130,6 @@ public class KochManager implements Observer{
     ts1.setBegin();
     System.out.println("begin process");
     threadcount = 0;
-    //Thread threadl = new Thread(new Run(new KochFractal() , "l", nxt, this));
-    //Thread threadb = new Thread(new Run(new KochFractal() , "b", nxt, this));
-    //Thread threadr = new Thread(new Run(new KochFractal() , "r", nxt, this));
-    //threadl.start();
-    //threadb.start();
-    //threadr.start();
     Tasks(nxt);
     this.execService.submit(tl);
     this.execService.submit(tr);
