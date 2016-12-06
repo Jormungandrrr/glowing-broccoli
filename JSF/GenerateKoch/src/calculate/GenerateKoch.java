@@ -73,11 +73,11 @@ public class GenerateKoch{
     
     public static void FileOutput(){
         try {
-            FileWriter fw = new FileWriter("textedges.txt");
+            FileWriter fw = new FileWriter(uri + "textedges.txt");
             for (Edge e : EdgeList) {
                 fw.write(String.valueOf(e.X1) + ";");
-                fw.write(String.valueOf(e.X2) + ";");
                 fw.write(String.valueOf(e.Y1) + ";");
+                fw.write(String.valueOf(e.X2) + ";");
                 fw.write(String.valueOf(e.Y2) + ";");
                 fw.write(String.valueOf(e.color) + ";");
             }
@@ -91,12 +91,12 @@ public class GenerateKoch{
     
     public static void FileBufferOutput(){
         try {
-           FileWriter fw = new FileWriter("textedges.txt");
+           FileWriter fw = new FileWriter(uri + "textedges.txt");
            BufferedWriter bw = new BufferedWriter(fw);
            for (Edge e : EdgeList) {
                 bw.write(String.valueOf(e.X1) + ";");
+                bw.write(String.valueOf(e.Y2) + ";");
                 bw.write(String.valueOf(e.X2) + ";");
-                bw.write(String.valueOf(e.Y1) + ";");
                 bw.write(String.valueOf(e.Y2) + ";");
                 bw.write(String.valueOf(e.color) + ";");
             }
@@ -128,7 +128,7 @@ public class GenerateKoch{
     
     public static void BinaryOutput(){
         try {          
-            FileOutputStream fileOut = new FileOutputStream("binaryedges.ser");
+            FileOutputStream fileOut = new FileOutputStream(uri + "binaryedges.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(EdgeList);
             out.close();
@@ -141,7 +141,7 @@ public class GenerateKoch{
     
     public static void BinaryBufferOutput(){
         try {
-            FileOutputStream fileOut = new FileOutputStream("binaryedges.ser");
+            FileOutputStream fileOut = new FileOutputStream(uri + "binaryedges.ser");
             OutputStream buffer = new BufferedOutputStream( fileOut );
             ObjectOutputStream out = new ObjectOutputStream(buffer);
             out.writeObject(EdgeList);
