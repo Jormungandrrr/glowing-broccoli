@@ -132,7 +132,7 @@ public class GenerateKoch{
     
     public static void BinaryOutput(){
         try {          
-            FileOutputStream fileOut = new FileOutputStream(uri + "binaryedges.ser");
+            FileOutputStream fileOut = new FileOutputStream("binaryedges.ser");
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
             out.writeObject(EdgeList);
             out.close();
@@ -145,7 +145,7 @@ public class GenerateKoch{
     
     public static void BinaryBufferOutput(){
         try {
-            FileOutputStream fileOut = new FileOutputStream(uri + "binaryedges.ser");
+            FileOutputStream fileOut = new FileOutputStream("binaryedges.ser");
             OutputStream buffer = new BufferedOutputStream( fileOut );
             ObjectOutputStream out = new ObjectOutputStream(buffer);
             out.writeObject(EdgeList);
