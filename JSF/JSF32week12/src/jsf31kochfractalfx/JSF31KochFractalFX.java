@@ -86,6 +86,7 @@ public class JSF31KochFractalFX extends Application {
     private Task tr = null;
     private Task tb = null;
     
+    public static String uri = "C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12\\egdes\\";
     
     @Override
     public void start(Stage primaryStage) {
@@ -191,40 +192,43 @@ public class JSF31KochFractalFX extends Application {
             }
 
             private void loadLevelButtonActionPerformed(ActionEvent event) {
-               TimeStamp LoadText = new TimeStamp();
-               TimeStamp LoadBufferText = new TimeStamp();
-               TimeStamp LoadBinary = new TimeStamp();
-               TimeStamp LoadBufferBinary = new TimeStamp();
+               //TimeStamp LoadText = new TimeStamp();
+               //TimeStamp LoadBufferText = new TimeStamp();
+               //TimeStamp LoadBinary = new TimeStamp();
+               //TimeStamp LoadBufferBinary = new TimeStamp();
                TimeStamp LoadMapped = new TimeStamp();
                 
-               LoadText.setBegin();
-               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
-               kochManager.LoadLevel();
-               LoadText.setEnd();
-               
-               LoadBufferText.setBegin();
-               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
-               kochManager.LoadBufferLevel();
-               LoadBufferText.setEnd();
-               
-               LoadBinary.setBegin();
-               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
-               kochManager.BinaryLoadLevel();
-               LoadBinary.setEnd();
-               
-               LoadBufferBinary.setBegin();
-               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
-               kochManager.BinaryBufferLoadLevel();
-               LoadBufferBinary.setEnd();
-               
+//               LoadText.setBegin();
+//               WaitForRead(Paths.get(uri));
+//               kochManager.LoadLevel();
+//               LoadText.setEnd();
+//               
+//               LoadBufferText.setBegin();
+//                if ( WaitForRead(Paths.get(uri))) {
+//                    kochManager.LoadBufferLevel();
+//                }
+//               LoadBufferText.setEnd();
+//               
+//               LoadBinary.setBegin();
+//               WaitForRead(Paths.get(uri));
+//               kochManager.BinaryLoadLevel();
+//               LoadBinary.setEnd();
+//               
+//               LoadBufferBinary.setBegin();
+//               WaitForRead(Paths.get(uri));
+//               kochManager.BinaryBufferLoadLevel();
+//               LoadBufferBinary.setEnd();
+//               
                LoadMapped.setBegin();
-               kochManager.readMapped();
+                if ( WaitForRead(Paths.get(uri))) {
+                     kochManager.readMapped();
+                }
                LoadMapped.setEnd();
-               
-               System.out.println("LoadText: " + LoadText.toString());
-               System.out.println("LoadBufferText: " +LoadBufferText.toString());
-               System.out.println("LoadBinary: " +LoadBinary.toString());
-               System.out.println("LoadBufferBinary: " +LoadBufferBinary.toString());
+//               
+               //System.out.println("LoadText: " + LoadText.toString());
+               //System.out.println("LoadBufferText: " +LoadBufferText.toString());
+               //System.out.println("LoadBinary: " +LoadBinary.toString());
+               //System.out.println("LoadBufferBinary: " +LoadBufferBinary.toString());
                System.out.println("Mapped: " +LoadMapped.toString());
             }
         });
@@ -442,16 +446,18 @@ public class JSF31KochFractalFX extends Application {
                 e.color);
     }
     
-    private void WaitForRead(Path dir){
+    private Boolean WaitForRead(Path dir){
         try {
+            System.gc();
             WatchService watcher = FileSystems.getDefault().newWatchService();
             dir.register(watcher,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
-            while (true) {
+            boolean available = false;
+            while (!available) {
                 WatchKey key;
                 try {
                     key = watcher.take();
                 } catch (InterruptedException ex) {
-                    return;
+                    return false;
                 }
                  
                 for (WatchEvent<?> event : key.pollEvents()) {
@@ -462,10 +468,12 @@ public class JSF31KochFractalFX extends Application {
                     Path fileName = ev.context();
                      
                     System.out.println(kind.name() + ": " + fileName);
-                     
-                    if (kind == ENTRY_MODIFY &&
-                            fileName.toString().equals("DirectoryWatchDemo.java")) {
-                        System.out.println("My source file has changed!!!");
+                    
+                    if (kind == ENTRY_MODIFY && fileName.toString().equals("mapped")) {
+                        Thread.sleep(500);
+                        System.out.println("File is not in use");
+                        available = true;
+                        return true;
                     }
                 }
                  
@@ -476,7 +484,11 @@ public class JSF31KochFractalFX extends Application {
             }
         } catch (IOException ex) {
             Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        } catch (InterruptedException ex) {
+            Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return false;
     }
     
 

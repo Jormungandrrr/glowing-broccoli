@@ -32,7 +32,7 @@ public class GenerateKoch{
      * 
      */
     public static List<Edge> EdgeList = new ArrayList<>();
-    public static String uri = "C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12\\";
+    public static String uri = "C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12\\egdes\\";
     public static TimeStamp fileoutput;
     public static TimeStamp bufferedfileoutput;
     public static TimeStamp binaryoutput;
@@ -55,32 +55,32 @@ public class GenerateKoch{
         bufferedbinaryoutput = new TimeStamp();
         mapped = new TimeStamp();
         
-        fileoutput.setBegin();
-        FileOutput();
-        fileoutput.setEnd();
+        //fileoutput.setBegin();
+        //FileOutput();
+        //fileoutput.setEnd();
         
-        bufferedfileoutput.setBegin();
-        FileBufferOutput();
-        bufferedfileoutput.setEnd();
+        //bufferedfileoutput.setBegin();
+        //FileBufferOutput();
+        //bufferedfileoutput.setEnd();
         
-        binaryoutput.setBegin();
-        BinaryOutput();
-        binaryoutput.setEnd();
+        //binaryoutput.setBegin();
+        //BinaryOutput();
+        //binaryoutput.setEnd();
         
-        bufferedbinaryoutput.setBegin();
-        BinaryBufferOutput();
-        bufferedbinaryoutput.setEnd();
+        //bufferedbinaryoutput.setBegin();
+        //BinaryBufferOutput();
+        //bufferedbinaryoutput.setEnd();
         
         mapped.setBegin();
         writeMapped();
         mapped.setEnd();
         
         
-        System.out.println("Fileoutput: " +fileoutput.toString());
-        System.out.println("bufferedFileoutput: " +bufferedfileoutput.toString());
-        System.out.println("binaryoutput: " +binaryoutput.toString());
+        //System.out.println("Fileoutput: " +fileoutput.toString());
+        //System.out.println("bufferedFileoutput: " +bufferedfileoutput.toString());
+        //System.out.println("binaryoutput: " +binaryoutput.toString());
         System.out.println("bufferedbinaryoutput: " +bufferedbinaryoutput.toString());
-        System.out.println("mapped: " +mapped.toString());
+        //System.out.println("mapped: " +mapped.toString());
     }
     
     public static void FileOutput(){
@@ -169,15 +169,25 @@ public class GenerateKoch{
         try
         {
            RandomAccessFile memoryMappedFile = new RandomAccessFile(uri + "mapped", "rw");
-           MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 80000);
+           MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, memoryMappedFile.length());
            ByteArrayOutputStream baos = new ByteArrayOutputStream();
            ObjectOutputStream oos = new ObjectOutputStream(baos);
+           int memory = 0;
+           for (Edge e : EdgeList) {
+               memory += 40;
+           }
+           memoryMappedFile.setLength(memory);
            oos.writeObject(EdgeList);
            oos.flush();
            out.put(baos.toByteArray());
+           
            oos.close();
            baos.flush();
            baos.close();
+           out.clear();
+           memoryMappedFile.getChannel().close();
+           memoryMappedFile.close();
+           System.gc();
 
         } catch (Exception ex)
         {

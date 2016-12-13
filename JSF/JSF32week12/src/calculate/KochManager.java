@@ -47,6 +47,7 @@ public class KochManager implements Observer{
     private Task tb = null;
     private Task tr = null;
     
+    
     public KochManager(JSF31KochFractalFX application) {
     this.application = application;
     this.koch = new KochFractal();
@@ -96,7 +97,7 @@ public class KochManager implements Observer{
     public synchronized void LoadLevel(){
         EdgeList.clear();
         try {
-            File inFile = new File("textedges.txt");                                 
+            File inFile = new File(JSF31KochFractalFX.uri + "textedges.txt");                                 
             Scanner scanner = new Scanner(inFile);     
             String inputSentence = scanner.nextLine();
             String[] content = inputSentence.split(";");   
@@ -116,7 +117,7 @@ public class KochManager implements Observer{
     public synchronized void LoadBufferLevel(){
         EdgeList.clear();
          try {
-            File inFile = new File("textedges.txt"); 
+            File inFile = new File(JSF31KochFractalFX.uri + "textedges.txt"); 
             StringBuffer sb = new StringBuffer();
             Scanner scanner = new Scanner(inFile);  
             sb.append(scanner.next());
@@ -138,7 +139,7 @@ public class KochManager implements Observer{
      public synchronized void BinaryLoadLevel(){
         EdgeList.clear();
         try {
-            Path filepath = Paths.get("binaryedges.ser");
+            Path filepath = Paths.get(JSF31KochFractalFX.uri + "binaryedges.ser");
             byte[] data = Files.readAllBytes(filepath);
             ByteArrayInputStream bis = new ByteArrayInputStream(data);
             ObjectInput in = new ObjectInputStream(bis);
@@ -155,7 +156,7 @@ public class KochManager implements Observer{
      public synchronized void BinaryBufferLoadLevel(){
         EdgeList.clear();
         try {
-            Path filepath = Paths.get("binaryedges.ser");
+            Path filepath = Paths.get(JSF31KochFractalFX.uri + "binaryedges.ser");
             byte[] data = Files.readAllBytes(filepath);
             ByteArrayInputStream bis = new ByteArrayInputStream(data);
             InputStream buffer = new BufferedInputStream(bis);
@@ -172,8 +173,8 @@ public class KochManager implements Observer{
      
      public void readMapped() { 
         try {
-          RandomAccessFile memoryMappedFile = new RandomAccessFile("mapped", "rw");
-          MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 80000);
+          RandomAccessFile memoryMappedFile = new RandomAccessFile(JSF31KochFractalFX.uri + "mapped", "rw");
+          MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, memoryMappedFile.length());
           byte[] bytes = new byte[out.remaining()];
           out.get(bytes);
  
