@@ -6,6 +6,18 @@ package jsf31kochfractalfx;
 
 import calculate.KochManager;
 import calculate.*;
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -183,29 +195,37 @@ public class JSF31KochFractalFX extends Application {
                TimeStamp LoadBufferText = new TimeStamp();
                TimeStamp LoadBinary = new TimeStamp();
                TimeStamp LoadBufferBinary = new TimeStamp();
-               
+               TimeStamp LoadMapped = new TimeStamp();
+                
                LoadText.setBegin();
-             //  kochManager.LoadLevel();
+               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
+               kochManager.LoadLevel();
                LoadText.setEnd();
                
                LoadBufferText.setBegin();
-             //  kochManager.LoadBufferLevel();
+               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
+               kochManager.LoadBufferLevel();
                LoadBufferText.setEnd();
                
                LoadBinary.setBegin();
-              // kochManager.BinaryLoadLevel();
+               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
+               kochManager.BinaryLoadLevel();
                LoadBinary.setEnd();
                
                LoadBufferBinary.setBegin();
-              // kochManager.BinaryBufferLoadLevel();
+               WaitForRead(Paths.get("C:\\Users\\Jorrit\\Documents\\GitHub\\glowing-broccoli\\JSF\\JSF32week12"));
+               kochManager.BinaryBufferLoadLevel();
                LoadBufferBinary.setEnd();
                
+               LoadMapped.setBegin();
                kochManager.readMapped();
+               LoadMapped.setEnd();
                
                System.out.println("LoadText: " + LoadText.toString());
                System.out.println("LoadBufferText: " +LoadBufferText.toString());
                System.out.println("LoadBinary: " +LoadBinary.toString());
                System.out.println("LoadBufferBinary: " +LoadBufferBinary.toString());
+               System.out.println("Mapped: " +LoadMapped.toString());
             }
         });
         grid.add(buttonLoadLevel, 5, 5);
@@ -420,6 +440,43 @@ public class JSF31KochFractalFX extends Application {
                 e.X2 * zoom + zoomTranslateX,
                 e.Y2 * zoom + zoomTranslateY,
                 e.color);
+    }
+    
+    private void WaitForRead(Path dir){
+        try {
+            WatchService watcher = FileSystems.getDefault().newWatchService();
+            dir.register(watcher,ENTRY_CREATE,ENTRY_DELETE,ENTRY_MODIFY);
+            while (true) {
+                WatchKey key;
+                try {
+                    key = watcher.take();
+                } catch (InterruptedException ex) {
+                    return;
+                }
+                 
+                for (WatchEvent<?> event : key.pollEvents()) {
+                    WatchEvent.Kind<?> kind = event.kind();
+                     
+                    @SuppressWarnings("unchecked")
+                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
+                    Path fileName = ev.context();
+                     
+                    System.out.println(kind.name() + ": " + fileName);
+                     
+                    if (kind == ENTRY_MODIFY &&
+                            fileName.toString().equals("DirectoryWatchDemo.java")) {
+                        System.out.println("My source file has changed!!!");
+                    }
+                }
+                 
+                boolean valid = key.reset();
+                if (!valid) {
+                    break;
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(JSF31KochFractalFX.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 

@@ -170,7 +170,6 @@ public class GenerateKoch{
         {
            RandomAccessFile memoryMappedFile = new RandomAccessFile(uri + "mapped", "rw");
            MappedByteBuffer out = memoryMappedFile.getChannel().map(FileChannel.MapMode.READ_WRITE, 0, 80000);
-           
            ByteArrayOutputStream baos = new ByteArrayOutputStream();
            ObjectOutputStream oos = new ObjectOutputStream(baos);
            oos.writeObject(EdgeList);
